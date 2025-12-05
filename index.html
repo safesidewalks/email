@@ -10,6 +10,11 @@
         .btn:hover { background-color: #0056b3; }
         .manual-text { text-align: left; background: #f4f4f4; padding: 15px; border-radius: 5px; margin-top: 20px; font-size: 0.9em; border: 1px solid #ddd; }
         h1 { color: #333; }
+        /* Style for the instructional text */
+        .instructional-text {
+            color: #767676;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -23,7 +28,7 @@
         <p><strong>Or copy the text manually:</strong></p>
         <div class="manual-text">
             <strong>To:</strong> Eddie.Lin@seattle.gov<br>
-            <strong>Cc:</strong> Thaddaeus.Gregory2@seattle.gov<br>
+            <strong>Cc:</strong> Thaddaeus.Gregory@seattle.gov<br>
             <strong>Subject:</strong> Welcome to District 2! / Thoughts on 21st Ave S<br>
             <hr>
             <div id="emailBodyText" style="white-space: pre-wrap;"></div>
@@ -36,36 +41,56 @@
         const ccEmail = "Thaddaeus.Gregory@seattle.gov";
         const subject = "Welcome to District 2! / Thoughts on 21st Ave S";
         
-        // The Body Text
-        const body = `Dear Councilmember Lin,
+        // --- BODY PARTS ---
+        
+        // Part 1: Intro and Story Placeholder
+        const bodyPart1 = `Dear Councilmember Lin,
 
 Congratulations on your election! As a District 2 resident, I am eager to work with you.
 
 I am writing to ask for your partnership regarding the 21st Ave S improvement project. The 2024 Transportation Levy promised to prioritize 'New Sidewalks' and 'Pedestrian Safety'. We believe the current plan for an asphalt walkway misses the opportunity to provide the permanent, equitable infrastructure our community needs to safely access the Judkins Park Station.
 
 [INSERT YOUR PERSONAL STORY HERE]
-(Feel free to use one of the examples below as inspiration)
+`;
+
+        // Part 2: The Examples (Styled)
+        const examplesBlock = `(Feel free to use one of the examples below as inspiration)
 - "I want to feel safe walking with my grandchildren to the new light rail station."
 - "I've lived here for 30 years and want my street to be treated with the same dignity as others in Seattle."
 - "I have a young child and would like to be able to walk them to school without dodging cars."
-- "I have constant stormwater flooding that can only be addressed with curbed concrete sidewalks."
+- "I have constant stormwater flooding that can only be addressed with curbed concrete sidewalks."`;
 
+        // Part 3: The Closing and Name Placeholder
+        const bodyPart3 = `
 Please champion this investment for us. We are ready to support you in delivering a project that meets the Levy's highest standards.
 
 Sincerely,
 
 [YOUR NAME]
-[YOUR STREET & BLOCK] (e.g., "2300 Block of 21st Ave S" or "Beacon Hill Resident" — this confirms you are a District 2 constituent!)`;
+[YOUR STREET & BLOCK]`;
+
+        // Part 4: The Address Instruction (Styled)
+        const addressInstruction = ` (e.g., "2300 Block of 21st Ave S" or "Beacon Hill Resident" — this confirms you are a District 2 constituent!)`;
+
+        // --- COMBINE FOR EMAIL LINK (Plain Text) ---
+        const fullBodyPlainText = bodyPart1 + examplesBlock + bodyPart3 + addressInstruction;
+
+        // --- COMBINE FOR WEBPAGE DISPLAY (With HTML Styling) ---
+        // We wrap specific parts in <span> tags to apply the CSS class
+        const fullBodyHTML = bodyPart1 + 
+                             `<span class="instructional-text">${examplesBlock}</span>` + 
+                             bodyPart3 + 
+                             `<span class="instructional-text">${addressInstruction}</span>`;
 
         // --- LOGIC ---
         // 1. Encode the URI components for the mailto link
-        const mailtoLink = `mailto:${toEmail}?cc=${ccEmail}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        const mailtoLink = `mailto:${toEmail}?cc=${ccEmail}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(fullBodyPlainText)}`;
 
         // 2. Set the button link
         document.getElementById('emailBtn').setAttribute('href', mailtoLink);
 
-        // 3. Display the text on screen for manual copying if needed
-        document.getElementById('emailBodyText').innerText = body;
+        // 3. Display the text on screen with styling
+        document.getElementById('emailBodyText').innerHTML = fullBodyHTML;
 
         // 4. Attempt to auto-redirect
         window.location.href = mailtoLink;
